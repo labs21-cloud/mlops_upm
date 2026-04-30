@@ -114,7 +114,7 @@ Usar el endpoint `POST /generate` con un cuerpo como este:
 
 ```json
 {
-  "labels": ,
+  "labels": [0, 1, 2, 3],
   "seed": 42
 }
 ```
@@ -177,9 +177,9 @@ El servicio se ejecuta en un contenedor basado en `python:3.12-slim`, instala de
 
 El proyecto integra Weights & Biases para registrar métricas, checkpoints y artefactos durante entrenamiento.
 
-Enlace al proyecto W&B: **PENDIENTE DE INSERTAR**
+Enlace al proyecto W&B: https://wandb.ai/ja-pirona-universidad-polit-cnica-de-madrid/cvae-mnist-mlops
 
-Enlace al W&B Report: **PENDIENTE DE INSERTAR**
+Enlace al W&B Report: https://api.wandb.ai/links/ja-pirona-universidad-polit-cnica-de-madrid/8xia44yq
 
 ## Endpoint en producción
 
@@ -213,6 +213,10 @@ Actualmente este proyecto ya cumple con:
 
 Pendiente de cierre final:
 - publicar y enlazar el W&B Report.
+
+## Pruebas realizadas
+
+El proyecto incluye pruebas básicas en `tests/test_api.py` para validar el arranque de la API, el endpoint `/health` y el endpoint `/generate` con entradas válidas e inválidas.
 
 ## Notas para el evaluador
 
