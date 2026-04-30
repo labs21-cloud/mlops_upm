@@ -44,8 +44,10 @@ def main():
     args = parse_args()
     set_seed(args.seed)
 
-    output_dir = Path(args.output_dir)
-    model_dir = Path(args.model_dir)
+    run_name = args.run_name.strip().replace(" ", "-")
+
+    output_dir = Path(args.output_dir) / "runs" / run_name
+    model_dir = Path(args.model_dir) / "runs" / run_name
     checkpoints_dir = model_dir / "checkpoints"
 
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -87,7 +89,7 @@ def main():
         logger = WandbLogger(
             project=args.wandb_project,
             entity=args.wandb_entity,
-            name=args.run_name,
+            name=run_name,
             save_dir=str(output_dir),
             log_model="all",
         )
@@ -108,7 +110,7 @@ def main():
         enable_progress_bar=True,
     )
 
-    print("Iniciando entrenamiento del Generador Condicional...")
+    print(f"Iniciando entrenamiento del Generador Condicional para run: {run_name}")
     trainer.fit(model, train_loader, val_loader)
     print("Entrenamiento finalizado.")
 
@@ -116,13 +118,13 @@ def main():
     if not best_ckpt_path:
         raise RuntimeError("No se ha encontrado ningún checkpoint guardado.")
 
-    final_ckpt_path = model_dir / "cvae.ckpt"
+    final_ckpt_path = model_dir / f"{run_name}.ckpt"
     shutil.copy2(best_ckpt_path, final_ckpt_path)
 
     best_model = CVAE.load_from_checkpoint(best_ckpt_path)
     best_model.eval()
 
-    grid_path = output_dir / "sample_grid.png"
+    grid_path = output_dir / f"{run_name}_sample_grid.png"
     generate_grid(
         best_model,
         num_classes=10,
