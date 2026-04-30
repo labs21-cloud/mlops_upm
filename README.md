@@ -227,3 +227,14 @@ Para comprobar el despliegue en producción:
 1. Abrir `https://cvae-mnist-api.onrender.com/docs`.
 2. Probar `GET /health`.
 3. Probar `POST /generate` desde `https://cvae-mnist-api.onrender.com/docs` usando una lista de etiquetas válidas entre 0 y 9.
+
+## Resultado de las pruebas
+
+Las pruebas manuales de la API se realizaron desde `https://cvae-mnist-api.onrender.com/docs` y verificaron lo siguiente:
+
+- `GET /health` devuelve `200` y confirma que el modelo está cargado.
+- `POST /generate` con `labels: [0, 1, 2, 3]` devuelve `200` y responde con `labels`, `images_base64` y `model_name`.
+- `POST /generate` con `labels: [-1, 10]` devuelve `400` porque las etiquetas deben estar entre `0` y `9`.
+- `POST /generate` con `labels: []` devuelve `422` porque la lista debe contener al menos un elemento.
+
+Estas pruebas coinciden con `tests/test_api.py`, que valida el arranque de la API, la generación con etiquetas válidas y el rechazo de entradas inválidas.
