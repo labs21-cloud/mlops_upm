@@ -13,7 +13,6 @@ El objetivo de esta práctica no es rediseñar el mejor modelo posible, sino apl
 ```text
 cvae-mnist-mlops/
 ├── notebooks/
-├── configs/
 ├── data/
 │   └── raw/
 ├── models/
@@ -30,7 +29,6 @@ cvae-mnist-mlops/
 │   │   └── service.py
 │   └── utils/
 │       ├── seed.py
-│       └── paths.py
 ├── tests/
 ├── README.md
 ├── requirements.txt
@@ -42,7 +40,6 @@ cvae-mnist-mlops/
 ### Descripción de carpetas y archivos principales
 
 - `notebooks/`: contiene el notebook original usado como punto de partida.
-- `configs/`: carpeta reservada para configuración del proyecto.
 - `data/raw/`: datos originales o descargas en bruto.
 - `models/`: checkpoints del modelo entrenado, incluido `models/cvae.ckpt`.
 - `src/data/mnist.py`: carga y preparación del dataset MNIST.
@@ -52,7 +49,6 @@ cvae-mnist-mlops/
 - `src/api/schemas.py`: esquemas de entrada y salida.
 - `src/api/service.py`: carga del modelo y generación de imágenes.
 - `src/utils/seed.py`: utilidades de reproducibilidad.
-- `src/utils/paths.py`: gestión de rutas del proyecto.
 - `tests/`: tests del proyecto.
 - `requirements.txt`: dependencias necesarias.
 - `Dockerfile`: imagen Docker del servicio.
@@ -210,13 +206,11 @@ Actualmente este proyecto ya cumple con:
 - dockerización del servicio;
 - trazabilidad experimental con Weights & Biases;
 - endpoint accesible en producción.
-
-Pendiente de cierre final:
-- publicar y enlazar el W&B Report.
+- W&B Report.
 
 ## Pruebas realizadas
 
-El proyecto incluye pruebas básicas en `tests/test_api.py` para validar el arranque de la API, el endpoint `/health` y el endpoint `/generate` con entradas válidas e inválidas.
+El proyecto incluye pruebas básicas en `tests/test_api.py` para validar que la API responde correctamente en `/health`, que `POST /generate` funciona con etiquetas válidas, que rechaza etiquetas fuera del rango permitido y que detecta listas vacías.
 
 ## Notas para el evaluador
 
@@ -226,10 +220,10 @@ La forma más rápida de probar el proyecto es:
 2. Ejecutar `docker compose up --build`.
 3. Abrir `http://127.0.0.1:8000/docs`.
 4. Probar `GET /health`.
-5. Probar `POST /generate` con etiquetas válidas.
+5. Probar `POST /generate` desde `http://127.0.0.1:8000/docs` usando una lista de etiquetas válidas entre 0 y 9, por ejemplo: `[0, 1, 2, 3]`.
 
 Para comprobar el despliegue en producción:
 
 1. Abrir `https://cvae-mnist-api.onrender.com/docs`.
 2. Probar `GET /health`.
-3. Probar `POST /generate`.
+3. Probar `POST /generate` desde `https://cvae-mnist-api.onrender.com/docs` usando una lista de etiquetas válidas entre 0 y 9.
