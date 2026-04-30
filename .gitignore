@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Pytest
+.pytest_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Environment / secrets
+.env
+
+# Training outputs and logs
+outputs/
+wandb/
+
+# Optional: local raw data caches
+data/raw/
+
+# Optional: keep generated model checkpoints out of git
+# models/
