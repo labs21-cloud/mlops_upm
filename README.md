@@ -2,11 +2,11 @@
 
 Autor: **Jairo**
 
-Este repositorio contiene la adaptación de un notebook previo de Deep Learning a un proyecto de MLOps reproducible, modular, testeable y desplegable. El modelo utilizado es un **Conditional Variational Autoencoder (CVAE)** entrenado sobre **MNIST** para generar dígitos manuscritos condicionados por etiqueta. [1]
+Este repositorio contiene la adaptación de un notebook previo de Deep Learning a un proyecto de MLOps reproducible, modular, testeable y desplegable. El modelo utilizado es un **Conditional Variational Autoencoder (CVAE)** entrenado sobre **MNIST** para generar dígitos manuscritos condicionados por etiqueta.
 
 ## Objetivo del proyecto
 
-El objetivo de esta práctica no es rediseñar el mejor modelo posible, sino aplicar las prácticas de MLOps vistas en la asignatura sobre un proyecto previo ya existente. En concreto, este repositorio incluye notebook, código modular de entrenamiento e inferencia, API con FastAPI, tests, Docker, trazabilidad experimental con Weights & Biases y preparación para despliegue. [1][2][3]
+El objetivo de esta práctica no es rediseñar el mejor modelo posible, sino aplicar las prácticas de MLOps vistas en la asignatura sobre un proyecto previo ya existente. El repositorio incluye notebook, código modular de entrenamiento e inferencia, API con FastAPI, tests, Docker, trazabilidad experimental con Weights & Biases y un endpoint desplegado en producción.
 
 ## Estructura del repositorio
 
@@ -41,16 +41,16 @@ cvae-mnist-mlops/
 
 ### Descripción de carpetas y archivos principales
 
-- `notebooks/`: contiene el notebook original que se usó como punto de partida del proyecto.
+- `notebooks/`: contiene el notebook original usado como punto de partida.
 - `configs/`: carpeta reservada para configuración del proyecto.
 - `data/raw/`: datos originales o descargas en bruto.
 - `models/`: checkpoints del modelo entrenado, incluido `models/cvae.ckpt`.
 - `src/data/mnist.py`: carga y preparación del dataset MNIST.
 - `src/models/cvae.py`: definición del modelo CVAE.
-- `src/inference/generate.py`: utilidades de generación e inferencia.
-- `src/api/app.py`: API FastAPI.
-- `src/api/schemas.py`: esquemas Pydantic de entrada y salida.
-- `src/api/service.py`: servicio que carga el modelo y genera imágenes.
+- `src/inference/generate.py`: lógica de generación e inferencia.
+- `src/api/app.py`: aplicación FastAPI.
+- `src/api/schemas.py`: esquemas de entrada y salida.
+- `src/api/service.py`: carga del modelo y generación de imágenes.
 - `src/utils/seed.py`: utilidades de reproducibilidad.
 - `src/utils/paths.py`: gestión de rutas del proyecto.
 - `tests/`: tests del proyecto.
@@ -60,92 +60,33 @@ cvae-mnist-mlops/
 
 ## Requisitos previos
 
-Para ejecutar este proyecto desde cero se recomienda disponer de lo siguiente:
+Antes de empezar, hay que tener instalado:
 
-- **Git** instalado.
-- **Python 3.12** o una versión compatible con las dependencias.
-- **pip** instalado.
-- **Docker Desktop** instalado y en ejecución si se quiere usar la vía contenedorizada.
-- Conexión a Internet para descargar dependencias y, en caso de reentrenar con tracking, sincronizar con Weights & Biases.
+- Git
+- Docker Desktop
+
+> Esta guía está pensada para que cualquier persona pueda ejecutar el proyecto sin configurar manualmente Python ni dependencias locales. La forma recomendada y oficial de uso es con Docker Compose.
 
 ## Clonado del repositorio
-
-Clonar el proyecto:
 
 ```bash
 git clone https://github.com/labs21-cloud/mlops_upm.git
 cd mlops_upm
 ```
 
-> Nota: si el nombre de la carpeta local no coincide exactamente con `cvae-mnist-mlops`, no pasa nada. Lo importante es ejecutar los comandos desde la raíz del repositorio clonado.
+## Ejecución del proyecto
 
-## Opción 1: ejecución local con Python
+### 1. Levantar el servicio
 
-### 1. Crear un entorno virtual
-
-En Windows PowerShell:
+Desde la raíz del repositorio:
 
 ```bash
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
+docker compose up --build
 ```
 
-En Linux/macOS:
+Este comando construye la imagen, crea el contenedor y levanta la API.
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-```
-
-### 2. Instalar dependencias
-
-```bash
-pip install --upgrade pip
-pip install -r requirements.txt
-```
-
-### 3. Verificar que existe el checkpoint
-
-El proyecto espera encontrar un checkpoint en:
-
-```text
-models/cvae.ckpt
-```
-
-Si ese archivo ya está presente en el repositorio, puede usarse directamente para inferencia. Si no estuviera disponible, será necesario entrenar el modelo antes de usar la API.
-
-## Entrenamiento del modelo
-
-Para lanzar el entrenamiento desde la raíz del proyecto:
-
-```bash
-python -m src.train
-```
-
-Si se quiere registrar el experimento en **Weights & Biases**, usar:
-
-```bash
-python -m src.train --use-wandb --run-name cvae-mnist-baseline
-```
-
-Durante una ejecución real del proyecto ya se registró una run baseline llamada `cvae-mnist-baseline` dentro del proyecto `cvae-mnist-mlops`, con métricas como `train_loss`, `val_loss`, `trainer/global_step`, un checkpoint final en `models/cvae.ckpt` y una grid de muestras en `outputs/sample_grid.png`. [3]
-
-## Lanzar la API en local sin Docker
-
-Con el entorno virtual activado y las dependencias instaladas:
-
-```bash
-uvicorn src.api.app:app --host 0.0.0.0 --port 8000
-```
-
-Una vez arrancada la API, se puede comprobar desde el navegador o con una petición HTTP.
-
-### Endpoints principales
-
-- `GET /health`: comprueba que el modelo está cargado y el servicio está listo.
-- `POST /generate`: genera imágenes condicionadas a partir de una lista de etiquetas entre 0 y 9.
-
-### Documentación interactiva
+### 2. Verificar que el servicio está funcionando
 
 Abrir en el navegador:
 
@@ -153,35 +94,29 @@ Abrir en el navegador:
 http://127.0.0.1:8000/docs
 ```
 
-### Ejemplo de comprobación rápida
-
-En el navegador:
+También se puede comprobar el estado del servicio en:
 
 ```text
 http://127.0.0.1:8000/health
 ```
 
-O con PowerShell:
+Si todo ha arrancado correctamente, la API devolverá un estado `ok` y confirmará que el modelo está cargado.
 
-```bash
-Invoke-WebRequest -Uri http://127.0.0.1:8000/health
+### 3. Probar la generación de imágenes
+
+Entrar en la documentación interactiva:
+
+```text
+http://127.0.0.1:8000/docs
 ```
 
-## Ejemplo de uso del endpoint `/generate`
+Usar el endpoint `POST /generate` con un cuerpo como este:
 
-Ejemplo de petición con PowerShell:
-
-```bash
-$body = @{
-  labels = @(0,1,2,3)
-  seed = 42
-} | ConvertTo-Json
-
-Invoke-RestMethod `
-  -Uri http://127.0.0.1:8000/generate `
-  -Method Post `
-  -ContentType "application/json" `
-  -Body $body
+```json
+{
+  "labels": ,
+  "seed": 42
+}
 ```
 
 La respuesta devuelve:
@@ -189,73 +124,58 @@ La respuesta devuelve:
 - una lista de imágenes codificadas en base64;
 - el nombre del modelo.
 
-## Opción 2: ejecución con Docker
+### 4. Detener el servicio
 
-Esta es la vía recomendada para reproducir el proyecto de forma más controlada.
-
-### 1. Construir la imagen
-
-```bash
-docker build -t cvae-mnist-api .
-```
-
-### 2. Ejecutar el contenedor
-
-```bash
-docker run -p 8000:8000 cvae-mnist-api
-```
-
-### 3. Probar la API
-
-Abrir:
-
-```text
-http://127.0.0.1:8000/docs
-```
-
-O comprobar salud:
-
-```text
-http://127.0.0.1:8000/health
-```
-
-## Opción 3: ejecución con Docker Compose
-
-Desde la raíz del proyecto:
-
-```bash
-docker compose up --build
-```
-
-Para detener el servicio:
+Cuando se quiera parar el proyecto:
 
 ```bash
 docker compose down
 ```
 
-Esta opción es la más cómoda para levantar el servicio de forma local durante la corrección.
+## Entrenamiento del modelo
+
+Si se desea volver a entrenar el modelo desde la raíz del proyecto:
+
+```bash
+python -m src.train
+```
+
+Si se quiere registrar el experimento en Weights & Biases:
+
+```bash
+python -m src.train --use-wandb --run-name cvae-mnist-baseline
+```
+
+Durante una ejecución real del proyecto ya se registró una run baseline llamada `cvae-mnist-baseline` dentro del proyecto `cvae-mnist-mlops`, generando métricas, un checkpoint final en `models/cvae.ckpt` y una imagen de muestras.
 
 ## Ejecución de tests
 
-Con el entorno virtual activado e instaladas las dependencias:
+Desde la raíz del proyecto:
 
 ```bash
 pytest tests/
 ```
 
-Los tests permiten validar al menos la funcionalidad básica del servicio y del proyecto.
-
 ## Dependencias principales
 
-El proyecto usa dependencias como PyTorch, Torchvision, PyTorch Lightning, W&B, FastAPI, Uvicorn, Pydantic, Pillow y Pytest. [4]
+El proyecto utiliza principalmente:
+- PyTorch
+- Torchvision
+- PyTorch Lightning
+- FastAPI
+- Uvicorn
+- Pydantic
+- Pillow
+- Pytest
+- Weights & Biases
 
-## Docker actual
+## Docker
 
-El servicio se construye con una imagen `python:3.12-slim`, instala dependencias desde `requirements.txt`, copia el código fuente y el directorio `models/`, expone el puerto 8000 y arranca con Uvicorn sobre `src.api.app:app`. [5]
+El servicio se ejecuta en un contenedor basado en `python:3.12-slim`, instala dependencias desde `requirements.txt`, copia el código fuente y el directorio `models/`, y arranca la API con Uvicorn.
 
 ## Trazabilidad experimental con Weights & Biases
 
-El proyecto integra Weights & Biases para registrar métricas, checkpoints y artefactos durante entrenamiento. [3]
+El proyecto integra Weights & Biases para registrar métricas, checkpoints y artefactos durante entrenamiento.
 
 Enlace al proyecto W&B: **PENDIENTE DE INSERTAR**
 
@@ -263,20 +183,36 @@ Enlace al W&B Report: **PENDIENTE DE INSERTAR**
 
 ## Endpoint en producción
 
-Endpoint público del servicio: **PENDIENTE DE INSERTAR**
+Servicio desplegado en Render:
+
+```text
+https://cvae-mnist-api.onrender.com
+```
+
+Documentación interactiva en producción:
+
+```text
+https://cvae-mnist-api.onrender.com/docs
+```
+
+Health check en producción:
+
+```text
+https://cvae-mnist-api.onrender.com/health
+```
 
 ## Estado del proyecto respecto a la práctica
 
-Actualmente este proyecto ya cubre:
-- reutilización de un modelo DL previo; [1]
-- estructura de proyecto MLOps con notebook, código, API y tests; [1][2]
-- versionado en GitHub; [1]
-- dockerización local del servicio; [1][5]
-- tracking experimental con W&B. [3]
+Actualmente este proyecto ya cumple con:
+- reutilización de un modelo de DL previo;
+- estructura de proyecto MLOps con notebook, código, API y tests;
+- versionado en GitHub público;
+- dockerización del servicio;
+- trazabilidad experimental con Weights & Biases;
+- endpoint accesible en producción.
 
 Pendiente de cierre final:
-- publicar y enlazar el W&B Report; [1]
-- dejar operativo y enlazado el endpoint público. [1]
+- publicar y enlazar el W&B Report.
 
 ## Notas para el evaluador
 
@@ -288,4 +224,8 @@ La forma más rápida de probar el proyecto es:
 4. Probar `GET /health`.
 5. Probar `POST /generate` con etiquetas válidas.
 
-Si se desea revisar la parte de entrenamiento y experimentación, se puede ejecutar `python -m src.train --use-wandb --run-name cvae-mnist-baseline` desde un entorno virtual con dependencias instaladas. [3]
+Para comprobar el despliegue en producción:
+
+1. Abrir `https://cvae-mnist-api.onrender.com/docs`.
+2. Probar `GET /health`.
+3. Probar `POST /generate`.
