@@ -19,6 +19,7 @@ mlops_upm/
 ├── data/
 │   └── raw/
 ├── models/
+│   ├── cvae.ckpt
 │   └── runs/
 ├── outputs/
 │   └── runs/
@@ -49,6 +50,7 @@ mlops_upm/
 
 - `notebooks/`: contiene el notebook original usado como punto de partida.
 - `data/raw/`: datos originales o descargas en bruto.
+- `models/cvae.ckpt`: checkpoint estable usado por la API para inferencia, tests y despliegue.
 - `models/runs/`: checkpoints y modelos finales asociados a cada entrenamiento.
 - `outputs/runs/`: artefactos de salida de cada run, como imágenes generadas y logs.
 - `src/data/mnist.py`: carga y preparación del dataset MNIST.
@@ -58,7 +60,7 @@ mlops_upm/
 - `src/api/schemas.py`: esquemas de entrada y salida.
 - `src/api/service.py`: carga del modelo y generación de imágenes.
 - `src/utils/seed.py`: utilidades de reproducibilidad.
-- `src/train.py`: script de entrenamiento configurable desde línea de comandos.
+- `src/train.py`: script de entrenamiento configurable desde línea de comandos y con logging por run.
 - `.github/workflows/ci.yml`: workflow de integración continua con GitHub Actions.
 - `tests/test_api.py`: tests básicos de la API.
 - `requirements.txt`: dependencias necesarias.
@@ -171,11 +173,13 @@ El log permite seguir el inicio del entrenamiento, argumentos usados, creación 
 
 ## Trazabilidad experimental con Weights & Biases
 
-El proyecto integra Weights & Biases para registrar métricas, hiperparámetros, checkpoints y artefactos durante entrenamiento.
+El proyecto integra Weights & Biases para registrar métricas, hiperparámetros y resultados relevantes de los experimentos durante el entrenamiento.
 
-Enlace al proyecto W&B: [https://wandb.ai/ja-pirona-universidad-polit-cnica-de-madrid/cvae-mnist-mlops](https://wandb.ai/ja-pirona-universidad-polit-cnica-de-madrid/cvae-mnist-mlops)
+Enlace al proyecto W&B:  
+[https://wandb.ai/ja-pirona-universidad-polit-cnica-de-madrid/cvae-mnist-mlops](https://wandb.ai/ja-pirona-universidad-polit-cnica-de-madrid/cvae-mnist-mlops)
 
-Enlace al W&B Report: [https://api.wandb.ai/links/ja-pirona-universidad-polit-cnica-de-madrid/8xia44yq](https://api.wandb.ai/links/ja-pirona-universidad-polit-cnica-de-madrid/8xia44yq)
+Enlace al W&B Report:  
+[https://wandb.ai/ja-pirona-universidad-polit-cnica-de-madrid/cvae-mnist-mlops/reports/CVAE-MNIST-Reporte-de-experimentaci-n-MLOps--VmlldzoxNjcyNjI0Mg](https://wandb.ai/ja-pirona-universidad-polit-cnica-de-madrid/cvae-mnist-mlops/reports/CVAE-MNIST-Reporte-de-experimentaci-n-MLOps--VmlldzoxNjcyNjI0Mg)
 
 ## Tests
 
@@ -215,6 +219,7 @@ El proyecto utiliza principalmente:
 - Pillow
 - Pytest
 - Weights & Biases
+- httpx
 
 ## Docker
 
