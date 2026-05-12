@@ -175,11 +175,8 @@ El log permite seguir el inicio del entrenamiento, argumentos usados, creación 
 
 El proyecto integra Weights & Biases para registrar métricas, hiperparámetros y resultados relevantes de los experimentos durante el entrenamiento.
 
-Enlace al proyecto W&B:  
-[https://wandb.ai/ja-pirona-universidad-polit-cnica-de-madrid/cvae-mnist-mlops](https://wandb.ai/ja-pirona-universidad-polit-cnica-de-madrid/cvae-mnist-mlops)
-
 Enlace al W&B Report:  
-[https://wandb.ai/ja-pirona-universidad-polit-cnica-de-madrid/cvae-mnist-mlops/reports/CVAE-MNIST-Reporte-de-experimentaci-n-MLOps--VmlldzoxNjcyNjI0Mg](https://wandb.ai/ja-pirona-universidad-polit-cnica-de-madrid/cvae-mnist-mlops/reports/CVAE-MNIST-Reporte-de-experimentaci-n-MLOps--VmlldzoxNjcyNjI0Mg)
+[https://api.wandb.ai/links/ja-pirona-universidad-polit-cnica-de-madrid/vq72j1ot](https://api.wandb.ai/links/ja-pirona-universidad-polit-cnica-de-madrid/vq72j1ot)
 
 ## Tests
 
