@@ -158,7 +158,7 @@ Usar el endpoint `POST /generate` con un cuerpo como este:
 
 ```json
 {
-  "labels": ,
+  "labels": [0, 1, 2, 3],
   "seed": 42
 }
 ```
