@@ -176,7 +176,7 @@ El log permite seguir el inicio del entrenamiento, argumentos usados, creación 
 El proyecto integra Weights & Biases para registrar métricas, hiperparámetros y resultados relevantes de los experimentos durante el entrenamiento.
 
 Enlace al W&B Report:  
-[https://api.wandb.ai/links/ja-pirona-universidad-polit-cnica-de-madrid/vq72j1ot](https://api.wandb.ai/links/ja-pirona-universidad-polit-cnica-de-madrid/vq72j1ot)
+[[https://api.wandb.ai/links/ja-pirona-universidad-polit-cnica-de-madrid/vq72j1ot](https://api.wandb.ai/links/ja-pirona-universidad-polit-cnica-de-madrid/v9mpx5rn)
 
 ## Tests
 
