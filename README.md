@@ -1,12 +1,22 @@
 # CVAE MNIST - Proyecto final de MLOps
 
-Autor: **Jairo**
+Autor: **Jairo Pirona**
 
 Este repositorio contiene la adaptación de un notebook previo de Deep Learning a un proyecto de MLOps reproducible, modular, testeable y desplegable. El modelo utilizado es un **Conditional Variational Autoencoder (CVAE)** entrenado sobre **MNIST** para generar dígitos manuscritos condicionados por etiqueta.
 
 ## Objetivo del proyecto
 
 El objetivo de esta práctica no es rediseñar el mejor modelo posible, sino aplicar las prácticas de MLOps vistas en la asignatura sobre un proyecto previo ya existente. El repositorio incluye notebook, código modular de entrenamiento e inferencia, API con FastAPI, tests, Docker, trazabilidad experimental con Weights & Biases, logging de entrenamiento, automatización básica con GitHub Actions y un endpoint desplegado en producción.
+
+## Funcionalidades principales
+
+- Entrenamiento configurable de un modelo CVAE sobre MNIST.
+- Generación condicionada de dígitos manuscritos a partir de etiquetas.
+- Servicio de inferencia mediante FastAPI.
+- Trazabilidad experimental con Weights & Biases.
+- Logging local por run de entrenamiento.
+- Tests básicos de API e integración continua con GitHub Actions.
+- Despliegue reproducible mediante Docker.
 
 ## Estructura del repositorio
 
@@ -80,8 +90,36 @@ mlops_upm/
 - Entorno virtual recomendado
 - Dependencias instaladas desde `requirements.txt`
 
-> La forma recomendada de probar el servicio es con Docker Compose.  
-> Si se desea reentrenar el modelo o ejecutar tests directamente en local, sí es necesario tener Python y las dependencias instaladas.
+La forma recomendada de probar el servicio es con Docker Compose.  
+Si se desea reentrenar el modelo o ejecutar tests directamente en local, sí es necesario tener Python y las dependencias instaladas.
+
+## Configuración local
+
+Para ejecutar el proyecto en local sin Docker:
+
+```bash
+python -m venv .venv
+```
+
+Activación del entorno:
+
+### En Windows
+
+```bash
+.venv\Scripts\activate
+```
+
+### En Linux/macOS
+
+```bash
+source .venv/bin/activate
+```
+
+Instalación de dependencias:
+
+```bash
+pip install -r requirements.txt
+```
 
 ## Clonado del repositorio
 
@@ -226,7 +264,7 @@ El servicio se ejecuta en un contenedor basado en `python:3.12-slim`, instala de
 
 Servicio desplegado en Render:
 
-[https://cvae-mnist-api.onrender.com](https://cvae-mnist-api.onrender.com)
+[https://cvae-mnist-api.onrender.com/](https://cvae-mnist-api.onrender.com/)
 
 Documentación interactiva en producción:
 
@@ -259,7 +297,7 @@ La forma más rápida de probar el proyecto es:
 
 1. Clonar el repositorio.
 2. Ejecutar `docker compose up --build`.
-3. Abrir `http://127.0.0.1:8000/docs`.
+3. Abrir [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs).
 4. Probar `GET /health`.
 5. Probar `POST /generate` usando una lista de etiquetas válidas, por ejemplo `[0, 1, 2, 3]`.
 
